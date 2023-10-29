@@ -1,0 +1,4 @@
+sanic==23.6.0
+pyjwt==2.8.0
+sanic_session==0.8.0
+pymongo==4.5.0
