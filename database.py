@@ -2,7 +2,9 @@ import os
 from pymongo import MongoClient
 
 # mongo client
-mongo_url = os.environ.get('mongo_url')
+mongo_url = "mongodb://172.17.0.2:27017/"
+mongo_url = "mongodb://localhost:27017/"
+
 mongo_client = MongoClient(mongo_url)
 
 # database
@@ -67,8 +69,5 @@ class MongoDB():
             return True
         else:
             return False
-
-
-
 
 mongo = MongoDB()

@@ -10,6 +10,13 @@ app.config.SECRET = "3a03ecd3660d419ba90599e7f02daaff"
 
 
 
+
+@app.get("/handshake")
+async def handshake(request):
+    return {
+        "status": "ok"
+    }
+
 @app.post("/check-login")
 async def login_required(request):
     # if the token is already in session
@@ -143,3 +150,9 @@ async def signup(request):
             "status":"failed",
             "message":"both passwords are not matching"
         }, status=401)
+        
+        
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5858, debug=True)
+    
