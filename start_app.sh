@@ -1,1 +1,1 @@
-python3 login.py
+uvicorn main:app --port 5858 --host 0.0.0.0 --reload
