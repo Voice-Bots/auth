@@ -14,8 +14,8 @@ USERNAME_TYPE = EmailStr
 
 
 
-class TestPayload(BaseModel):
-    test: str
+class BotId(BaseModel):
+    bot_id: str
 
 
 class Login(BaseModel):
@@ -47,6 +47,30 @@ class CreateAccount(BaseModel):
             return value
         
         raise ValueError(f"Account type must be one of {(all_types)}")
+    
+class CreateBot(BaseModel):
+    bot_id: str
+    client_name: str
+    bot_type: str
+    
+    
+    @validator("bot_type")
+    def check_existing_categories(cls, value):
+        print(f"Checking bot_type")
+        all_types = [
+            "kpi",
+            "speech",
+            "hybrid"
+        ]
+        
+        print(f"Checking existing categories, we got value as {value} | {all_types}")
+        condition = value in all_types
+        print(f"condition: {condition}")
+        if condition:
+            return value
+        
+        raise ValueError(f"Bot type must be one of {(all_types)}")
+    
     
 class Token(BaseModel):
     access_token : str

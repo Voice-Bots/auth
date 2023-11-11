@@ -45,15 +45,24 @@ class CAdmin(CUser):
         super(CAdmin, self).__init__(*args, **kwargs)
         self.read_scopes.extend([
             CADMIN_TYPE,
-            CUSER_TYPE
+            CUSER_TYPE,
+            "createbot",
+            "updatebotdetails",
+            "triggermany"
         ])
         self.write_scopes.extend([
             CADMIN_TYPE,
-            CUSER_TYPE
+            CUSER_TYPE,
+            "createbot",
+            "updatebotdetails",
+            "triggermany"
         ])
         self.delete_scopes.extend([
             CADMIN_TYPE,
-            CUSER_TYPE
+            CUSER_TYPE,
+            "createbot",
+            "updatebotdetails",
+            "triggermany"
         ])
     def __repr__(self):
         return CADMIN_TYPE

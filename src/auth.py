@@ -32,6 +32,7 @@ def verify_token(token: str, credentials_exception):
 
 
 def current_user(token:str=Depends(oauth_schema)):
+    logger.info(f"getting current user : {token}")
     credentials_exception = HTTPException(status_code=401, detail="could not validate credentials")
     return verify_token(token, credentials_exception)
 
@@ -42,5 +43,9 @@ def check_access(payload):
     logger.info(f"current_user_type : {current_user_type}")
     to = payload.get("to_endpoint")
     _type = payload.get("_type")
-    return current_user_type().has_access(to, _type)
+    
+    access = current_user_type().has_access(to, _type)
+    
+    logger.info(f"{_type} access to {to} : {access}")
+    return access
     
