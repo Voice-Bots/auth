@@ -136,23 +136,11 @@ def create_account(request: Request, payload: CreateAccount): #,crnt_user: dict=
 
 
 @app.post("/createbot")
-def createbot(request: Request,): #payload: CreateBot,crnt_user: dict=Depends(current_user)):
+def createbot(request: Request, payload: CreateBot): #,crnt_user: dict=Depends(current_user)):
+    record = payload.dict()
+    result = request.app.db.put(collection=request.app.users, record=record)    
+    return True
     
-    # record = payload.dict()
-    # crnt_user.update({
-    #     **record,
-    #     "to_endpoint": "createbot",
-    #     "_type": "write"
-    # })
-    # if check_access(crnt_user):
-        
-    #     result = request.app.db.put(collection=request.app.users, record=record)
-        
-    if True:
-        return True
-    else:
-        raise  HTTPException(401, "Access denied")
-
 
 @app.post("/updatebotdetails")
 async def updatebotdetails(request: Request, crnt_user: dict=Depends(current_user)):

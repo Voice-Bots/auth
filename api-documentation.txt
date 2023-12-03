@@ -17,3 +17,29 @@ Response
     "created_at": "ISODate(2023-12-03T23:19:41.117654+05:30)",
     "created_by": "madhusudhanreddy.gone@outlook.com"
 }
+
+
+=======================================================================================
+=======================================================================================
+=======================================================================================
+
+
+REQUEST
+=======
+curl --location 'http://0.0.0.0:5858/login' \
+--header 'Authorization: Barear' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "madhusudhanreddy.gone@outlook.com",
+    "password": "Madhusudhan"
+}'
+
+RESPONSE
+========
+{
+    "status": "success",
+    "username": "madhusudhanreddy.gone@outlook.com",
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hZGh1c3VkaGFucmVkZHkuZ29uZUBvdXRsb29rLmNvbSIsImFjY291bnRfdHlwZSI6IkFkbWluIiwiYWNjb3VudF9pZCI6ImYyYWNjM2VkNDU0YjQyNTc5NmViZDkyNzlmNjA5YjkzIiwiY3JlYXRlZF9hdCI6IklTT0RhdGUoMjAyMy0xMi0wM1QyMzoxOTo0MS4xMTc2NTQrMDU6MzApIiwiY3JlYXRlZF9ieSI6Im1hZGh1c3VkaGFucmVkZHkuZ29uZUBvdXRsb29rLmNvbSIsImV4cCI6MTcwMTY0OTQ3MH0.FVoK6zycd2CEXn1ft77_d8uNqeZFM_q6xpTgYAFDpl8",
+    "expires_at": "ISODate(2023-12-04T00:24:30.566035+05:30)",
+    "created_at": "ISODate(2023-12-03T23:24:30.566072+05:30)"
+}
