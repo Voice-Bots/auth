@@ -8,9 +8,9 @@ from loguru import logger
 oauth_schema = OAuth2PasswordBearer(tokenUrl="login")
 
 
-SECRET_KEY = "random secret key"
+SECRET_KEY = "B5418CF9F2C94A16A42A546FFA6C2FE9"
 ALGORITHM = "HS256"
-TOKEN_EXPIRATION = 30
+TOKEN_EXPIRATION = 60 # minutes
 
 def generate_token(payload: dict, ):
     expire_in = datetime.now() + timedelta(minutes=TOKEN_EXPIRATION)
@@ -19,7 +19,7 @@ def generate_token(payload: dict, ):
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
     
 
-def verify_token(token: str, credentials_exception):
+def extract_payload(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
     except JWTError:
@@ -34,10 +34,10 @@ def verify_token(token: str, credentials_exception):
 def current_user(token:str=Depends(oauth_schema)):
     logger.info(f"getting current user : {token}")
     credentials_exception = HTTPException(status_code=401, detail="could not validate credentials")
-    return verify_token(token, credentials_exception)
+    return extract_payload(token, credentials_exception)
 
 def check_access(payload):
-    credentials_exception = HTTPException(status_code=401, detail="not authorized to access")
+    credentials_exception = HTTPException(status_code=401, detail="Not authorized to access")
     logger.info(f"payload : {payload}")
     current_user_type = get_current_user_type(payload)
     logger.info(f"current_user_type : {current_user_type}")

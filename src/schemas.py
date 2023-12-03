@@ -31,12 +31,12 @@ class CreateAccount(BaseModel):
     
     @validator("account_type")
     def check_existing_categories(cls, value):
-        all_types = [ADMIN_TYPE,
-                    MANAGER_TYPE,
-                    DEVELOPER_TYPE,
-                    TESTER_TYPE,
-                    CADMIN_TYPE,
-                    CUSER_TYPE]
+        # all_types = [ADMIN_TYPE,
+        #             MANAGER_TYPE,
+        #             DEVELOPER_TYPE,
+        #             TESTER_TYPE,
+        #             CADMIN_TYPE,
+        #             CUSER_TYPE]
         
         all_types = ACCOUNT_TYPES.keys()
         

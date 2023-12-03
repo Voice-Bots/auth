@@ -1,0 +1,19 @@
+Request
+=======
+curl --location 'http://0.0.0.0:5858/createaccount' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "account_type":"Admin",
+    "username":"madhusudhanreddy.gone@outlook.com",
+    "password":"Madhusudhan"
+}'
+
+Response
+========
+{
+    "status": "success",
+    "account_type": "Admin",
+    "account_id": "f2acc3ed454b425796ebd9279f609b93",
+    "created_at": "ISODate(2023-12-03T23:19:41.117654+05:30)",
+    "created_by": "madhusudhanreddy.gone@outlook.com"
+}
