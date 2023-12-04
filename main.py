@@ -10,7 +10,8 @@ from src.utils import (
     get_default_token_expire, 
     verify_password, 
     verify_token,
-    login_req_url
+    login_req_url,
+    return_failed_response
 )
 from loguru import logger
 import time
@@ -50,20 +51,27 @@ async def is_valid_token(request: Request, call_next):
     
     url = request.url
     if not login_req_url(url):
-        logger.info(f"No autherization required = {url}")
+        logger.info(f"No token check required = {url}")
         response = await call_next(request)
         process_time = time.time() - start_time
         logger.info(f"URL = {url} :: process_time={process_time}")
         return response
     
     if verify_token(request,access_token):
-        logger.info(f"autherization required = {url} .... checking token access")
+        logger.info(f"token check required = {url} .... checking token access")
         response = await call_next(request)
         process_time = time.time() - start_time
         logger.info(f"URL = {url} :: process_time={process_time}")
         return response
     else:
-        raise HTTPException(status.HTTP_404_NOT_FOUND,detail="invalid auth token")
+        content = {
+            "status":"failed",
+            "message":"invalid auth token",
+            "status_code":401
+        } 
+        
+        return return_failed_response(**content)
+        #raise HTTPException(status.HTTP_404_NOT_FOUND,detail="invalid auth token")
 
 
 

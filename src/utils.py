@@ -1,3 +1,4 @@
+from fastapi.responses import JSONResponse
 from passlib.context import CryptContext
 from src.user_types import ACCOUNT_TYPES
 from loguru import logger
@@ -11,6 +12,7 @@ password_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
 
 # when deploying project we can give whichever zone we want, and depends on that timezone, datetime will be stored in db
 zone = os.environ.get('TIMEZONE') or "Asia/Kolkata"
+logger.info(f"ZONE = {zone}")
 TIMEZONE = timezone(zone)
 TOKEN_EXPIRATION = 60 # minutes
 
@@ -27,10 +29,11 @@ def verify_token(request,access_token):
     condition = {
         "access_token":access_token
     }
-    result = request.app.db.get(collection=request.app.tokens, condition=condition)
-    logger.info(f"verify token DB result = {result}")
-    if result:
-        return True
+    if access_token:
+        result = request.app.db.get(collection=request.app.tokens, condition=condition)
+        logger.info(f"verify token DB result = {result}")
+        if result:
+            return True            
     return False        
 
 def get_current_user_type(payload):
@@ -43,11 +46,13 @@ def unique_id(text=""):
     return str(uuid.uuid4().hex)
     
 def get_current_datetime():
-    now = datetime.now(TIMEZONE)
+    now = datetime.now()
+    now = now.astimezone(TIMEZONE)
     return f"ISODate({now.isoformat()})"
 
 def get_default_token_expire():
-    expires_at = datetime.now(TIMEZONE) + timedelta(minutes=TOKEN_EXPIRATION)
+    expires_at = datetime.now() + timedelta(minutes=TOKEN_EXPIRATION)
+    expires_at = expires_at.astimezone(TIMEZONE)
     return f"ISODate({expires_at.isoformat()})"
 
 def login_req_url(url):
@@ -57,3 +62,10 @@ def login_req_url(url):
     if api in LOGIN_REQUIRED_URLS:
         return True
     return False
+
+def return_failed_response(**kwargs):
+    logger.info(f"kwargs={kwargs}")
+    if kwargs.get("status_code"):
+        return JSONResponse(content=kwargs, status_code=kwargs.get("status_code"))
+    return JSONResponse(content=kwargs, status_code=400)
+    
