@@ -47,7 +47,15 @@ class CreateAccount(BaseModel):
             return value
         
         raise ValueError(f"Account type must be one of {(all_types)}")
-    
+
+    # @validator("username")
+    # def check_existing_username(cls, username):
+        
+    #     res = cls.app.db.get(collection=cls.app.users, record={"username":username})
+    #     print(res)
+
+
+
 class CreateBot(BaseModel):
     bot_id: str
     client_name: str
@@ -80,4 +88,21 @@ class TokenData(BaseModel):
     username: USERNAME_TYPE
     password: str
     account_type: str
+    
+
+class DemoRegistration(BaseModel):
+    phone_number: int
+
+    @validator("phone_number")
+    def check_existing_categories(cls, phone_number):
+        
+        phone_number = str(phone_number).replace("+", "").replace(" ", "")
+        if phone_number.startswith("91") and len(phone_number) >=12:
+            phone_number = phone_number.replace("91", "")
+
+        phone_number = int(phone_number)
+        if len(str(phone_number)) == 10:
+            return phone_number
+    
+        raise ValueError(f"Phone number is invalid")
     

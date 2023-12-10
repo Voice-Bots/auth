@@ -4,17 +4,20 @@ from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 from src.utils import get_current_user_type
 from loguru import logger
+import os
 
 oauth_schema = OAuth2PasswordBearer(tokenUrl="login")
 
 
-SECRET_KEY = "B5418CF9F2C94A16A42A546FFA6C2FE9"
-ALGORITHM = "HS256"
-TOKEN_EXPIRATION = 60 # minutes
+SECRET_KEY = os.environ.get("secret_key") or "B5418CF9F2C94A16A42A546FFA6C2FE9"
+ALGORITHM = os.environ.get("password_algo") or "HS256"
+TOKEN_EXPIRATION = os.environ.get("token_expiration") or 60 # minutes
 
 def generate_token(payload: dict, ):
     expire_in = datetime.now() + timedelta(minutes=TOKEN_EXPIRATION)
     payload["exp"] = expire_in
+    if "username" in payload:
+        del payload['username']
     logger.info(f"generating token for {payload}")
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
     
@@ -49,3 +52,17 @@ def check_access(payload):
     logger.info(f"{_type} access to {to} : {access}")
     return access
     
+def check_existing_username(payload, request):
+    
+    try:
+        username = payload['username']
+    except:
+        return False, "username key should pass in payload"
+    else:
+        condition = {
+            "username":username
+        }
+        result = request.app.db.get(collection=request.app.users, condition=condition)
+        if result:
+            return False, "User is already existing in our records"
+        return True, ""

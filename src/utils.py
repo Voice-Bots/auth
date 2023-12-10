@@ -6,7 +6,6 @@ from pytz import timezone
 import uuid
 from datetime import datetime, timedelta
 import os
-from src.login_req_urls import LOGIN_REQUIRED_URLS
 
 password_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
 
@@ -48,20 +47,14 @@ def unique_id(text=""):
 def get_current_datetime():
     now = datetime.now()
     now = now.astimezone(TIMEZONE)
-    return f"ISODate({now.isoformat()})"
+    print(now)
+    return f"ISODate('{now.isoformat()}')"
 
 def get_default_token_expire():
     expires_at = datetime.now() + timedelta(minutes=TOKEN_EXPIRATION)
     expires_at = expires_at.astimezone(TIMEZONE)
-    return f"ISODate({expires_at.isoformat()})"
+    return f"ISODate('{expires_at.isoformat()}')"
 
-def login_req_url(url):
-    logger.info(f"URL = {url}")
-    api = "/"+"/".join(str(url).split("/")[3:])
-    logger.info(f"API = {api}")
-    if api in LOGIN_REQUIRED_URLS:
-        return True
-    return False
 
 def return_failed_response(**kwargs):
     logger.info(f"kwargs={kwargs}")

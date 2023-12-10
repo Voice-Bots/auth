@@ -108,13 +108,16 @@ class Admin(Manager):
     def __init__(self, *args, **kwargs):
         super(Manager, self).__init__(*args, **kwargs)
         self.read_scopes.extend([
-            MANAGER_TYPE
+            MANAGER_TYPE,
+            ADMIN_TYPE
         ])
         self.write_scopes.extend([
-            MANAGER_TYPE
+            MANAGER_TYPE,
+            ADMIN_TYPE
         ])
         self.delete_scopes.extend([
-            MANAGER_TYPE
+            MANAGER_TYPE,
+            ADMIN_TYPE
         ])
     def __repr__(self):
         return ADMIN_TYPE
