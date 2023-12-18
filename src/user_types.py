@@ -6,6 +6,8 @@ CADMIN_TYPE = "CAdmin"
 CUSER_TYPE = "CUser"
 
 
+
+
 class _User:
     def __init__(self):
         self.read_scopes = [
