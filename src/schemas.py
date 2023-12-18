@@ -1,5 +1,6 @@
 
 from pydantic import BaseModel, EmailStr, validator
+from typing import List
 from src.user_types import (ACCOUNT_TYPES,
                             ADMIN_TYPE,
                             MANAGER_TYPE,
@@ -9,6 +10,8 @@ from src.user_types import (ACCOUNT_TYPES,
                             CUSER_TYPE)
 
 from datetime import datetime
+import re
+from src.user_types import access_types_obj
 
 USERNAME_TYPE = EmailStr
 
@@ -27,16 +30,11 @@ class CreateAccount(BaseModel):
     username: USERNAME_TYPE
     password: str
     account_type: str
+    # access_types: List
     
     
     @validator("account_type")
     def check_existing_categories(cls, value):
-        # all_types = [ADMIN_TYPE,
-        #             MANAGER_TYPE,
-        #             DEVELOPER_TYPE,
-        #             TESTER_TYPE,
-        #             CADMIN_TYPE,
-        #             CUSER_TYPE]
         
         all_types = ACCOUNT_TYPES.keys()
         
@@ -48,12 +46,27 @@ class CreateAccount(BaseModel):
         
         raise ValueError(f"Account type must be one of {(all_types)}")
 
-    # @validator("username")
-    # def check_existing_username(cls, username):
-        
-    #     res = cls.app.db.get(collection=cls.app.users, record={"username":username})
-    #     print(res)
 
+    @validator("username")
+    def validate_username(cls, username):
+        email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+        if(re.fullmatch(email_regex, username)):
+            return username
+        raise ValueError(f"username should be in email format")
+    
+
+    # @validator("access_types")
+    # def validate_access_types(cls, access_types:[]):
+        
+    #     if access_types:
+    #         if isinstance(access_types, str):
+    #             access_types = [access_types]
+            
+    #         if access_types in access_types_obj.access_types:
+    #             return access_types
+    #     raise ValueError(f"Access types should be write, read, update or delete")
+        
+        
 
 
 class CreateBot(BaseModel):

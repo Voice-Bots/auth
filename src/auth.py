@@ -46,6 +46,8 @@ def check_access(payload):
     logger.info(f"current_user_type : {current_user_type}")
     to = payload.get("to_endpoint")
     _type = payload.get("_type")
+    logger.info(f"_to : {to} _type : {_type}")
+
     
     access = current_user_type().has_access(to, _type)
     

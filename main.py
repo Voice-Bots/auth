@@ -78,7 +78,9 @@ def create_account(request: Request, payload: CreateAccount,crnt_user: dict=Depe
         record.update({
             "password": utils.hash(payload.password),
             "account_type": create_account_type,
-            "account_id": unique_id()
+            "account_id": unique_id(),
+            "to_endpoint": create_account_type,
+            "_type": "write"
         })
         
         result = request.app.db.put(collection=request.app.users, record=record)
